@@ -1,0 +1,26 @@
+services:
+  app:
+    image: node:14
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - DB_NAME=login_db
+    volumes:
+      - ../app/package.json:/usr/src/app/package.json
+      - ../app/server.js:/usr/src/app/server.js
+    working_dir: /usr/src/app
+    command: ["sh", "-c", "npm install -g nodemon && npm install && nodemon server.js"]
+
+  db:
+    image: mariadb:latest
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: login_db
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
